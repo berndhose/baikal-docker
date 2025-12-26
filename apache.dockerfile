@@ -7,7 +7,7 @@ ADD https://github.com/sabre-io/Baikal/releases/download/$VERSION/baikal-$VERSIO
 RUN apk add unzip && unzip -q baikal-$VERSION.zip
 
 # Final Docker image
-FROM php:8.1-apache
+FROM php:8.4-apache
 
 # Install Baikal and required dependencies
 COPY --from=builder --chown=www-data:www-data baikal /var/www/baikal
@@ -30,6 +30,7 @@ VOLUME /var/www/baikal/config
 VOLUME /var/www/baikal/Specific
 
 COPY files/docker-entrypoint.sh /docker-entrypoint.sh
+COPY files/favicon.ico /var/www/baikal/html
 COPY files/docker-entrypoint.d/*.sh files/docker-entrypoint.d/*.php files/docker-entrypoint.d/httpd/ /docker-entrypoint.d/
 ENTRYPOINT [ "/docker-entrypoint.sh" ]
 CMD  [ "apache2-foreground" ]
